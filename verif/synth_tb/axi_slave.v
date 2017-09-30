@@ -701,13 +701,22 @@ always @ (posedge clk) begin
     end
 end
 
+  //VW changed for Icarus
+  `ifdef IVLOG 
+   integer i;
+  `endif // IVLOG 
 
 always @ (posedge clk or negedge reset) begin
   if(!reset) begin
     wrid_fifo_rd_busy <= 1'b1;
     saxi2nvdla_axi_slave_bvalid <= 1'b0;
     sending_mem_wrresp2nvdla <= 1'b0;
-    for (integer i=0; i<(2**`AXI_AID_WIDTH); i++)
+    //VW changed for Icarus
+    `ifdef IVLOG 
+      for (i=0; i<(2**`AXI_AID_WIDTH); i++)
+    `else
+      for (integer i=0; i<(2**`AXI_AID_WIDTH); i++)
+    `endif // IVLOG 
     begin
 //       rdata_table_valid[i] <= 0;
         waddr_ptr_head[i] <= 0;
@@ -716,7 +725,12 @@ always @ (posedge clk or negedge reset) begin
         wdata_ptr_head[i] <= 0;
         wdata_ptr_tail[i] <= 0;
     end
-    for (integer i=0; i<(2**(`AXI_AID_WIDTH+`MAX_WRITE_CONFLICT)); i++)
+    //VW changed for Icarus
+    `ifdef IVLOG 
+      for (i=0; i<(2**(`AXI_AID_WIDTH+`MAX_WRITE_CONFLICT)); i++)
+    `else 
+      for (integer i=0; i<(2**(`AXI_AID_WIDTH+`MAX_WRITE_CONFLICT)); i++)
+    `endif // IVLOG 
     begin
         waddr_bank_av[i] <= 1'b0;
         wdata_bank_dv[i] <= 1'b0;
@@ -775,7 +789,12 @@ always @ (posedge clk or negedge reset) begin
     mem_rdret_araddr <= 0;
     rd_data_burst_count <= 4'b0000;
     shift_amount_retdata <= 0;
-    for (integer i=0; i<(2**`AXI_AID_WIDTH); i++)
+    //VW changed for Icarus
+    `ifdef IVLOG 
+     for (i=0; i<(2**`AXI_AID_WIDTH); i++)
+    `else
+      for (integer i=0; i<(2**`AXI_AID_WIDTH); i++)
+    `endif // IVLOG 
     begin
         rdata_table_valid[i] <= 0;
     end

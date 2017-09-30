@@ -71,3 +71,11 @@ cvc4:clean gen_rvra_do
 cvc4_gui:clean gen_rvra_do
 	vsim -do go2uvm_rvra.do
 
+run:
+	vsim -c +read_reg_poll_retries=10 +continue_on_fail +continue_on_fail +read_reg_poll_retries=100 +read_reg_poll_interval_clocks=100 +read_reg_timeout_clocks=100000   +input_file=/home/srini/proj/VWorks/VW_VIPs/NVDLA/hw-master/verif/sim/sanity0/input.txn +input_dir=/home/srini/proj/VWorks/VW_VIPs/NVDLA/hw-master/verif/sim/sanity0  +access +rw $(TOP) +UVM_TESTNAME=$(TEST) +UVM_VERBOSITY=UVM_HIGH  -do "run -all;"|tee go2uvm_run.log
+
+
+#/home/srini/proj/VWorks/VW_VIPs/NVDLA/hw-master/verif/synth_tb/sim_scripts/checktest_synthtb.pl ./test.log; \
+
+cvc5:
+	iverilog -f ivl.f -g2012 -o vw_nvdla | tee go2uvm_comp.log
